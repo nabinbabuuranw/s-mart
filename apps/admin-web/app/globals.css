@@ -1,0 +1,14 @@
+@tailwind base;@tailwind components;@tailwind utilities;
+:root{--paper:#F5F4F1;--surface:#FFFFFF;--ink:#17181C;--muted:#5D6068;--line:#DEDBD4;--hover:#ECEAE5;--accent:#B83A24;--accent-hover:#9C2F1C;--on-accent:#FFFFFF;--danger:#A12626;--ok:#1F6B45;--warn:#8A5A00;color-scheme:light}
+.dark{--paper:#121315;--surface:#1B1C1F;--ink:#ECEBE8;--muted:#A3A5AB;--line:#2D2F34;--hover:#25272B;--accent:#F2765E;--accent-hover:#F58C77;--on-accent:#1B0E0B;--danger:#F08A8A;--ok:#6FCF9B;--warn:#E6B450;color-scheme:dark}
+html,body{background:var(--paper);color:var(--ink)}
+body{font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",sans-serif;-webkit-font-smoothing:antialiased}
+h1,h2,.display{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;letter-spacing:-.01em}
+.inp{width:100%;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:6px;padding:.5rem .65rem;font-size:.875rem}
+.inp:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px}
+@keyframes sk{0%{opacity:.5}50%{opacity:1}100%{opacity:.5}}
+.skel{background:var(--hover);border-radius:6px;animation:sk 1.4s ease-in-out infinite}
+@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.rise{animation:rise .25s ease-out both}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}

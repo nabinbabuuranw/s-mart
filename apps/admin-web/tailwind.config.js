@@ -1,0 +1,3 @@
+module.exports={darkMode:'class',content:['./app/**/*.{ts,tsx}','./components/**/*.{ts,tsx}','./lib/**/*.{ts,tsx}'],
+theme:{extend:{colors:{paper:'var(--paper)',surface:'var(--surface)',ink:'var(--ink)',muted:'var(--muted)',line:'var(--line)',hover:'var(--hover)',accent:'var(--accent)','accent-hover':'var(--accent-hover)','on-accent':'var(--on-accent)',danger:'var(--danger)',ok:'var(--ok)',warn:'var(--warn)'},
+fontFamily:{serif:['"Iowan Old Style"','"Palatino Linotype"','Palatino','Georgia','serif'],sans:['ui-sans-serif','system-ui','-apple-system','"Segoe UI"','Roboto','"Noto Sans"','sans-serif']}}},plugins:[]};

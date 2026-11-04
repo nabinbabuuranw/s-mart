@@ -1,0 +1,11 @@
+'use client';
+import {useState} from 'react';
+import Link from 'next/link';
+import {api,rs,dt,qs} from '@/lib/api';
+import {useAsync,Async,PageHeader,Table,Pager,Button,Input,Select,Badge,Empty,Guard,statusTone} from '@/components/ui';
+import {ORDER_STATUSES} from '@smart/shared';
+export default function Orders(){const [q,setQ]=useState('');const [status,setStatus]=useState('');const [from,setFrom]=useState('');const [to,setTo]=useState('');const [page,setPage]=useState(1);
+  const s=useAsync(()=>api('/admin/orders'+qs({q,status,from,to,page,pageSize:15})),[q,status,from,to,page]);
+  return <Guard perm="orders.read"><PageHeader title="Orders" sub="Updates live when customers order."/>
+  <div className="mb-3 flex flex-wrap gap-2"><Input aria-label="Search orders" placeholder="Order number or customer" className="!w-64" value={q} onChange={(e:any)=>{setQ(e.target.value);setPage(1)}}/><Select aria-label="Status" className="!w-auto" value={status} onChange={(e:any)=>{setStatus(e.target.value);setPage(1)}}><option value="">All statuses</option>{ORDER_STATUSES.map(x=><option key={x} value={x}>{x.replace(/_/g,' ')}</option>)}</Select><Input aria-label="From date" type="date" className="!w-auto" value={from} onChange={(e:any)=>{setFrom(e.target.value);setPage(1)}}/><Input aria-label="To date" type="date" className="!w-auto" value={to} onChange={(e:any)=>{setTo(e.target.value);setPage(1)}}/></div>
+  <Async s={s} isEmpty={(d:any)=>!d.items.length} empty={<Empty title="No orders match" hint="New orders appear here the moment they are placed."/>}>{(d:any)=><><Table rows={d.items} cols={[{h:'Order',r:(o:any)=><Link className="font-medium underline-offset-2 hover:underline" href={'/orders/'+o.id}>{o.number}</Link>},{h:'Customer',r:(o:any)=>o.customer?.name||o.customerName||o.user?.name||'—'},{h:'Placed',r:(o:any)=><span className="text-xs text-muted">{dt(o.createdAt||o.placedAt)}</span>},{h:'Total',r:(o:any)=>rs(o.total??o.grandTotal)},{h:'Status',r:(o:any)=><Badge tone={statusTone(o.status)}>{o.status.replace(/_/g,' ')}</Badge>}]} onRow={(o:any)=>{location.href='/orders/'+o.id}}/><Pager page={d.page} pageSize={d.pageSize} total={d.total} onPage={setPage}/></>}</Async></Guard>}
