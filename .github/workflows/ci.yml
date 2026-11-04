@@ -1,0 +1,36 @@
+name: ci
+on:
+  push: { branches: [main] }
+  pull_request:
+permissions: { contents: read }
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env: { POSTGRES_USER: smart, POSTGRES_PASSWORD: ci_only_password, POSTGRES_DB: smart_test }
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U smart -d smart_test" --health-interval 5s --health-timeout 3s --health-retries 20
+    env:
+      TEST_DATABASE_URL: postgresql://smart:ci_only_password@127.0.0.1:5432/smart_test
+      DATABASE_URL: postgresql://smart:ci_only_password@127.0.0.1:5432/smart_test
+      NEXT_TELEMETRY_DISABLED: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - name: Generate throwaway secrets for this run only
+        run: |
+          echo "JWT_ACCESS_SECRET=$(openssl rand -base64 48)" >> "$GITHUB_ENV"
+          echo "SEED_DEMO_PASSWORD=$(openssl rand -base64 18)" >> "$GITHUB_ENV"
+      - run: npm run build:shared
+      - run: npm run db:generate
+      - run: npm run db:migrate
+      - name: API tests (the suite resets the test database itself)
+        run: npm test
+      - run: npm run build -w @smart/api
+      - run: npm run build -w @smart/admin-web
+      - run: npm run build -w @smart/customer-web
