@@ -1,0 +1,53 @@
+# WRITTEN, NOT EXECUTED on the authoring box (Docker is not installed there).
+# Usage (from repo root):  cp .env.example .env  (fill secrets)  &&  docker compose -f infra/docker-compose.yml --env-file .env up --build
+# No secrets live in this file: everything comes from .env.
+name: smart
+services:
+  postgres:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-smart}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: ${POSTGRES_DB:-smart}
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+  api:
+    build: { context: .., dockerfile: infra/docker/api.Dockerfile }
+    restart: unless-stopped
+    depends_on: { postgres: { condition: service_healthy } }
+    environment:
+      NODE_ENV: production
+      PORT: 4100
+      DATABASE_URL: postgresql://${POSTGRES_USER:-smart}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-smart}
+      JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET:?set JWT_ACCESS_SECRET in .env}
+      CORS_ORIGINS: ${CORS_ORIGINS:?set CORS_ORIGINS in .env}
+      PUBLIC_API_URL: ${PUBLIC_API_URL:?set PUBLIC_API_URL in .env}
+      UPLOAD_DIR: /data/uploads
+      BACKUP_DIR: /data/backups
+      ESEWA_SECRET_KEY: ${ESEWA_SECRET_KEY:-}
+      KHALTI_SECRET_KEY: ${KHALTI_SECRET_KEY:-}
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-}
+    volumes: [uploads:/data/uploads, backups:/data/backups]
+    ports: ["4100:4100"]
+  admin-web:
+    build:
+      context: ..
+      dockerfile: infra/docker/web.Dockerfile
+      args: { APP: admin-web, NEXT_PUBLIC_API_URL: "${PUBLIC_API_URL}" }
+    restart: unless-stopped
+    depends_on: [api]
+    ports: ["3100:3000"]
+  customer-web:
+    build:
+      context: ..
+      dockerfile: infra/docker/web.Dockerfile
+      args: { APP: customer-web, NEXT_PUBLIC_API_URL: "${PUBLIC_API_URL}" }
+    restart: unless-stopped
+    depends_on: [api]
+    ports: ["3101:3000"]
+volumes: { pgdata: {}, uploads: {}, backups: {} }
