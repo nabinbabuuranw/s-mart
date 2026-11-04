@@ -1,0 +1,31 @@
+{
+  "name": "s-mart",
+  "private": true,
+  "version": "1.0.0-m1",
+  "description": "S Mart: shared secure backend + Admin Website + Customer Website (Milestone 1)",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build:shared": "npm run build -w @smart/shared",
+    "db:generate": "prisma generate --schema prisma/schema.prisma",
+    "db:migrate": "prisma migrate deploy --schema prisma/schema.prisma",
+    "db:seed": "tsx prisma/seed.ts",
+    "dev:api": "npm run start:dev -w @smart/api",
+    "dev:admin": "npm run dev -w @smart/admin-web",
+    "dev:customer": "npm run dev -w @smart/customer-web",
+    "test": "npm run test -w @smart/api",
+    "test:e2e": "playwright test -c e2e/playwright.config.ts",
+    "build": "npm run build:shared && npm run build -w @smart/api && npm run build -w @smart/admin-web && npm run build -w @smart/customer-web"
+  },
+  "devDependencies": {
+    "typescript": "~5.9.3",
+    "@types/node": "^22.20.5",
+    "prisma": "6.19.3",
+    "tsx": "4.23.15"
+  }
+}
