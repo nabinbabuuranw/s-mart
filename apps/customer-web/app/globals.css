@@ -1,0 +1,36 @@
+@import '@fontsource-variable/fraunces/wght.css';
+@import '@fontsource/dm-sans/400.css';
+@import '@fontsource/dm-sans/500.css';
+@import '@fontsource/dm-sans/700.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --paper: #F6F4EE; --surface: #FFFFFF; --ink: #15191E; --muted: #566070; --line: #E2DED3; --soft: #E6EAEF;
+  --primary: #1E2B3A; --primary-hover: #14202C; --on-primary: #FFFFFF;
+  --accent: #D98E04; --accent-text: #8A5A00; --accent-soft: #FBEFD2;
+  --success: #1F7A4C; --danger: #B3261E; --info: #3E5C76;
+  color-scheme: light;
+}
+.dark {
+  --paper: #101418; --surface: #182029; --ink: #E9EDF1; --muted: #9AA6B2; --line: #28323D; --soft: #1F2A35;
+  --primary: #A9BDD3; --primary-hover: #C3D3E3; --on-primary: #101418;
+  --accent: #F0B33C; --accent-text: #F0B33C; --accent-soft: #3A2E12;
+  --success: #5FBF8A; --danger: #F2847C; --info: #8FB0CC;
+  color-scheme: dark;
+}
+html { background: var(--paper); color: var(--ink); }
+body { font-family: "DM Sans Variable", "DM Sans", ui-sans-serif, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+h1, h2, h3 { font-family: "Fraunces Variable", Fraunces, Georgia, serif; font-variation-settings: "SOFT" 50; letter-spacing: -0.01em; }
+:focus-visible { outline: 2px solid var(--accent-text); outline-offset: 2px; border-radius: 4px; }
+.skip-link { position: absolute; left: -9999px; top: 0; }
+.skip-link:focus { left: 12px; top: 12px; z-index: 100; background: var(--surface); color: var(--ink); padding: 8px 12px; border-radius: 8px; }
+.rule { border-color: var(--line); }
+.fade-in { animation: fadeIn 180ms ease-out both; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+.shimmer { background: linear-gradient(90deg, var(--soft), var(--surface), var(--soft)); background-size: 200% 100%; animation: shimmer 1.4s linear infinite; }
+@keyframes shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; transition-duration: 1ms !important; scroll-behavior: auto !important; }
+}
