@@ -12,7 +12,7 @@ export const prisma = new PrismaClient();
 
 export async function makeApp(over: Record<string, string> = {}): Promise<NestExpressApplication> {
   const env = loadEnv({ ...process.env, JWT_ACCESS_SECRET: process.env.JWT_ACCESS_SECRET ?? 'x'.repeat(40), ...over } as any);
-  const app = await createApp(env); await app.init(); return app;
+  const app = await createApp(env); await app.init(); await app.listen(0); return app; // listening up front: supertest needs a bound server
 }
 const ip = () => `10.${Math.floor(Math.random() * 250)}.${Math.floor(Math.random() * 250)}.${Math.floor(Math.random() * 250)}`;
 export const api = (app: NestExpressApplication) => request(app.getHttpServer());

@@ -18,6 +18,10 @@ export class AllExceptionsFilter implements ExceptionFilter {
       else if (e.code === 'P2025') { status = 404; code = 'not_found'; message = 'Record not found'; }
       else if (e.code === 'P2003') { status = 409; code = 'conflict'; message = 'Related record constraint failed'; }
       else { this.log.error(`${req.method} ${req.url} prisma ${e.code}`); }
+    } else if ((e as any)?.type === 'entity.too.large') {
+      status = 413; code = 'payload_too_large'; message = 'Request body is too large';
+    } else if ((e as any)?.type === 'entity.parse.failed' || (e as any)?.type === 'encoding.unsupported') {
+      status = 400; code = 'malformed_body'; message = 'Request body could not be read';
     } else {
       this.log.error(`${req.method} ${req.url} ${(e as Error)?.stack ?? e}`);
     }

@@ -19,7 +19,7 @@ export async function createApp(env: Env): Promise<NestExpressApplication> {
   const origins = env.CORS_ORIGINS.split(',').map((s) => s.trim()).filter(Boolean);
   app.enableCors({ origin: (o, cb) => cb(null, !o || origins.includes(o)), credentials: true, allowedHeaders: ['Content-Type', 'Authorization', 'Idempotency-Key', 'X-Client', 'X-CSRF'], methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'], maxAge: 600 });
   app.setGlobalPrefix('api/v1');
-  if (env.NODE_ENV !== 'production') {
+  if (env.NODE_ENV === 'development') { // API docs are exposed only on a developer machine, never in test or production
     const cfg = new DocumentBuilder().setTitle('S Mart API').setDescription('Shared backend for the S Mart admin site, customer site and (later) Android apps').setVersion('1.0.0').addBearerAuth().build();
     SwaggerModule.setup('api/docs', app, SwaggerModule.createDocument(app, cfg));
   }

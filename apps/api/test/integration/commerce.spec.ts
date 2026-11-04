@@ -308,7 +308,7 @@ describe('realtime', () => {
   }
   const waitFor = async (cond: () => boolean, ms = 4000) => { const t = Date.now(); while (!cond()) { if (Date.now() - t > ms) throw new Error('timeout waiting for event'); await new Promise((r) => setTimeout(r, 25)); } };
   it('an admin price change reaches a subscribed customer client; private order events need a ticket', async () => {
-    await app.listen(0); const port = app.getHttpServer().address().port;
+    const port = app.getHttpServer().address().port;
     const ad = await staff(app, 'manager'); const c = await customer(app); const p = await mkProduct({ price: 10000 });
     const pub: any[] = []; const sreq = await openStream(port, `${B}/realtime/stream`, (t, d) => pub.push({ t, d }));
     const tk = (await api(app).post(`${B}/realtime/ticket`).set(auth(c))).body.ticket; const mine: any[] = []; const creq = await openStream(port, `${B}/realtime/stream?ticket=${tk}`, (t, d) => mine.push({ t, d }));

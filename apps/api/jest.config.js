@@ -1,5 +1,6 @@
-const base = { preset: 'ts-jest', testEnvironment: 'node', rootDir: '.', setupFiles: ['<rootDir>/test/env.js'], transform: { '^.+\\.ts$': ['ts-jest', { tsconfig: '<rootDir>/tsconfig.json', diagnostics: false }] }, testTimeout: 60000 };
+const base = { preset: 'ts-jest', testEnvironment: 'node', rootDir: '.', setupFiles: ['<rootDir>/test/env.js'], transform: { '^.+\\.ts$': ['ts-jest', { tsconfig: '<rootDir>/tsconfig.json', diagnostics: false }] } };
 module.exports = {
+  testTimeout: 60000,
   globalSetup: '<rootDir>/test/global-setup.js',
   collectCoverageFrom: ['src/**/*.ts', '!src/main.ts'],
   coverageReporters: ['text-summary', 'json-summary'],
