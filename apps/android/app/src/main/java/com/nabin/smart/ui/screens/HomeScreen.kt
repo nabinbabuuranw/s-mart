@@ -31,7 +31,13 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.ui.text.style.TextOverflow
+import com.nabin.smart.ui.search.SearchSuggestions
 import com.nabin.smart.data.*
 import com.nabin.smart.ui.*
 import com.nabin.smart.ui.components.*
@@ -57,26 +63,7 @@ fun HomeScreen(nav: Nav, vm: AppViewModel) {
     }
 
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(bottom = 24.dp)) {
-        item {
-            Surface(
-                Modifier.fillMaxWidth().padding(16.dp),
-                shape = RoundedCornerShape(20.dp),
-                color = MaterialTheme.colorScheme.primary,
-            ) {
-                Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Text("Find it fast", style = MaterialTheme.typography.headlineSmall, color = MaterialTheme.colorScheme.onPrimary)
-                    Text(
-                        "Search the whole shop, add to your cart, and pay cash when it arrives.",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onPrimary,
-                    )
-                    Button(
-                        onClick = { nav.tab(Route.Shop) },
-                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary, contentColor = MaterialTheme.colorScheme.onSecondary),
-                    ) { Text("Search the shop") }
-                }
-            }
-        }
+        item { HomeSearch(nav, vm) }
 
         item { SectionTitle("Categories") }
         item {
@@ -90,7 +77,13 @@ fun HomeScreen(nav: Nav, vm: AppViewModel) {
                 )
                 else -> LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     items(categories.orEmpty()) { c ->
-                        AssistChip(onClick = { nav.tab(Route.Shop) }, label = { Text(c.name) })
+                        AssistChip(
+                            onClick = {
+                                vm.requestShop(ProductQuery(categorySlug = c.slug))
+                                nav.tab(Route.Shop)
+                            },
+                            label = { Text(c.name) },
+                        )
                     }
                 }
             }
@@ -135,6 +128,108 @@ private fun ProductRow(products: List<Product>?, origin: String, nav: Nav, empty
                 onClick = { nav.push(Route.Product(p.slug)) },
                 modifier = Modifier.width(160.dp),
             )
+        }
+    }
+}
+
+/** Search field with live suggestions. Suggestions come from the catalogue API and are ranked by SearchSuggestions. */
+@Composable
+private fun HomeSearch(nav: Nav, vm: AppViewModel) {
+    var typed by rememberSaveable { mutableStateOf("") }
+    var suggestions by remember { mutableStateOf<List<Product>>(emptyList()) }
+    var searching by remember { mutableStateOf(false) }
+    var failed by remember { mutableStateOf(false) }
+
+    LaunchedEffect(typed) {
+        if (!SearchSuggestions.shouldSearch(typed)) {
+            suggestions = emptyList()
+            searching = false
+            failed = false
+            return@LaunchedEffect
+        }
+        searching = true
+        delay(250)
+        try {
+            val page = vm.repo.products(ProductQuery(q = typed.trim(), pageSize = 20))
+            suggestions = SearchSuggestions.rank(typed, page.items)
+            failed = false
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            suggestions = emptyList()
+            failed = true
+        }
+        searching = false
+    }
+
+    Column(
+        Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp),
+    ) {
+        Text("Find it fast", style = MaterialTheme.typography.headlineSmall)
+        OutlinedTextField(
+            value = typed,
+            onValueChange = { typed = it },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
+            placeholder = { Text("Search the shop") },
+            leadingIcon = { Icon(Icons.Filled.Search, contentDescription = null) },
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+            keyboardActions = KeyboardActions(onSearch = {
+                vm.requestShop(ProductQuery(q = typed.trim()))
+                nav.tab(Route.Shop)
+            }),
+            trailingIcon = {
+                if (typed.isNotEmpty()) TextButton(onClick = { typed = "" }) { Text("Clear") }
+            },
+        )
+        if (SearchSuggestions.shouldSearch(typed)) {
+            when {
+                searching && suggestions.isEmpty() -> Text(
+                    "Searching…",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                failed -> Text(
+                    "Search is not available right now. Try again in a moment.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.error,
+                )
+                suggestions.isEmpty() -> Text(
+                    "No products match \"${typed.trim()}\".",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                else -> Surface(
+                    shape = RoundedCornerShape(12.dp),
+                    color = MaterialTheme.colorScheme.surface,
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+                ) {
+                    Column {
+                        suggestions.forEachIndexed { index, p ->
+                            if (index > 0) HorizontalDivider(color = MaterialTheme.colorScheme.outline)
+                            Column(
+                                Modifier
+                                    .fillMaxWidth()
+                                    .clickable { nav.push(Route.Product(p.slug)) }
+                                    .padding(horizontal = 14.dp, vertical = 12.dp),
+                            ) {
+                                Text(p.name, style = MaterialTheme.typography.titleSmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                                val meta = listOfNotNull(p.brand?.takeIf { it.isNotBlank() }, p.categoryName).joinToString(" · ")
+                                if (meta.isNotEmpty()) {
+                                    Text(meta, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if (suggestions.isNotEmpty()) {
+                TextButton(onClick = {
+                    vm.requestShop(ProductQuery(q = typed.trim()))
+                    nav.tab(Route.Shop)
+                }) { Text("See all results") }
+            }
         }
     }
 }
