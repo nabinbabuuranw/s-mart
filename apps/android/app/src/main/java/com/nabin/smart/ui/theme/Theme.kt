@@ -14,55 +14,87 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.nabin.smart.R
 
-// Ink & Marigold: the customer web palette (apps/customer-web/app/globals.css), light and dark.
+/**
+ * S Mart brand palette, taken from the official logo (the @smart.inaruwa profile picture):
+ * logo red #ED3D22 and logo green #1C9A4E. Text-safe variants are darker so body text passes WCAG AA
+ * (checked in palettes_log.md). Logo colours are used for graphics and large marks only.
+ */
+object SMartColors {
+    // light
+    val Paper = Color(0xFFF6F7F4)
+    val Surface = Color(0xFFFFFFFF)
+    val Ink = Color(0xFF15191E)
+    val Muted = Color(0xFF5B6470)
+    val Line = Color(0xFFE3E6E1)
+    val Green = Color(0xFF167D3F)        // primary action, 5.2:1 with white
+    val GreenDeep = Color(0xFF0F5F30)    // text on green-soft, 7.0:1
+    val GreenSoft = Color(0xFFE8F6EE)
+    val Red = Color(0xFFC42E16)          // accent / sale / secondary action, 5.6:1 with white
+    val RedSoft = Color(0xFFFDECE9)
+    val Error = Color(0xFFB3261E)        // 6.5:1 with white
+
+    // dark
+    val DarkPaper = Color(0xFF0F1411)
+    val DarkSurface = Color(0xFF161D18)
+    val DarkInk = Color(0xFFE9EFEA)
+    val DarkMuted = Color(0xFF9AA79E)
+    val DarkLine = Color(0xFF2A352E)
+    val DarkGreen = Color(0xFF4CC27C)    // 8.3:1 on dark paper
+    val DarkRed = Color(0xFFFF6B55)      // 6.6:1 on dark paper
+    val DarkGreenSoft = Color(0xFF1B3324)
+    val DarkRedSoft = Color(0xFF3A1D17)
+}
+
 private val Light = lightColorScheme(
-    primary = Color(0xFF1E2B3A),
+    primary = SMartColors.Green,
     onPrimary = Color(0xFFFFFFFF),
-    primaryContainer = Color(0xFFE6EAEF),
-    onPrimaryContainer = Color(0xFF15191E),
-    secondary = Color(0xFFD98E04),
-    onSecondary = Color(0xFF15191E),
-    secondaryContainer = Color(0xFFFBEFD2),
-    onSecondaryContainer = Color(0xFF8A5A00),
-    tertiary = Color(0xFF1F7A4C),
-    background = Color(0xFFF6F4EE),
-    onBackground = Color(0xFF15191E),
-    surface = Color(0xFFFFFFFF),
-    onSurface = Color(0xFF15191E),
-    surfaceVariant = Color(0xFFE6EAEF),
-    onSurfaceVariant = Color(0xFF566070),
-    outline = Color(0xFFE2DED3),
-    error = Color(0xFFB3261E),
+    primaryContainer = SMartColors.GreenSoft,
+    onPrimaryContainer = SMartColors.GreenDeep,
+    secondary = SMartColors.Red,
+    onSecondary = Color(0xFFFFFFFF),
+    secondaryContainer = SMartColors.RedSoft,
+    onSecondaryContainer = Color(0xFF8E2010),
+    tertiary = SMartColors.Green,
+    onTertiary = Color(0xFFFFFFFF),
+    background = SMartColors.Paper,
+    onBackground = SMartColors.Ink,
+    surface = SMartColors.Surface,
+    onSurface = SMartColors.Ink,
+    surfaceVariant = Color(0xFFEEF1EC),
+    onSurfaceVariant = SMartColors.Muted,
+    outline = SMartColors.Line,
+    outlineVariant = Color(0xFFEDEFEA),
+    error = SMartColors.Error,
     onError = Color(0xFFFFFFFF),
 )
 
 private val Dark = darkColorScheme(
-    primary = Color(0xFFA9BDD3),
-    onPrimary = Color(0xFF101418),
-    primaryContainer = Color(0xFF1F2A35),
-    onPrimaryContainer = Color(0xFFE9EDF1),
-    secondary = Color(0xFFF0B33C),
-    onSecondary = Color(0xFF101418),
-    secondaryContainer = Color(0xFF3A2E12),
-    onSecondaryContainer = Color(0xFFF0B33C),
-    tertiary = Color(0xFF5FBF8A),
-    background = Color(0xFF101418),
-    onBackground = Color(0xFFE9EDF1),
-    surface = Color(0xFF182029),
-    onSurface = Color(0xFFE9EDF1),
-    surfaceVariant = Color(0xFF1F2A35),
-    onSurfaceVariant = Color(0xFF9AA6B2),
-    outline = Color(0xFF28323D),
+    primary = SMartColors.DarkGreen,
+    onPrimary = SMartColors.DarkPaper,
+    primaryContainer = SMartColors.DarkGreenSoft,
+    onPrimaryContainer = Color(0xFFBFEBD0),
+    secondary = SMartColors.DarkRed,
+    onSecondary = SMartColors.DarkPaper,
+    secondaryContainer = SMartColors.DarkRedSoft,
+    onSecondaryContainer = Color(0xFFFFB4A8),
+    tertiary = SMartColors.DarkGreen,
+    onTertiary = SMartColors.DarkPaper,
+    background = SMartColors.DarkPaper,
+    onBackground = SMartColors.DarkInk,
+    surface = SMartColors.DarkSurface,
+    onSurface = SMartColors.DarkInk,
+    surfaceVariant = Color(0xFF1E2822),
+    onSurfaceVariant = SMartColors.DarkMuted,
+    outline = SMartColors.DarkLine,
+    outlineVariant = Color(0xFF222C25),
     error = Color(0xFFF2847C),
-    onError = Color(0xFF101418),
+    onError = SMartColors.DarkPaper,
 )
 
-/** Fraunces (headings) and DM Sans (body), the web's faces, bundled as static instances (SIL OFL 1.1). */
-private val Fraunces = FontFamily(
-    Font(R.font.fraunces_regular, FontWeight.Normal),
-    Font(R.font.fraunces_semibold, FontWeight.SemiBold),
-)
-
+/**
+ * DM Sans for everything: the logo's wordmark is a bold, rounded sans, so the headings follow it
+ * instead of a serif. DM Sans is bundled (SIL OFL 1.1, see assets/licenses).
+ */
 private val DmSans = FontFamily(
     Font(R.font.dmsans_regular, FontWeight.Normal),
     Font(R.font.dmsans_medium, FontWeight.Medium),
@@ -70,15 +102,18 @@ private val DmSans = FontFamily(
 )
 
 private val SMartTypography = Typography(
-    headlineLarge = TextStyle(fontFamily = Fraunces, fontWeight = FontWeight.SemiBold, fontSize = 32.sp),
-    headlineMedium = TextStyle(fontFamily = Fraunces, fontWeight = FontWeight.SemiBold, fontSize = 26.sp),
-    headlineSmall = TextStyle(fontFamily = Fraunces, fontWeight = FontWeight.SemiBold, fontSize = 22.sp),
-    titleLarge = TextStyle(fontFamily = Fraunces, fontWeight = FontWeight.SemiBold, fontSize = 20.sp),
-    titleMedium = TextStyle(fontFamily = DmSans, fontWeight = FontWeight.Medium, fontSize = 16.sp),
-    bodyLarge = TextStyle(fontFamily = DmSans, fontSize = 16.sp),
-    bodyMedium = TextStyle(fontFamily = DmSans, fontSize = 14.sp),
-    bodySmall = TextStyle(fontFamily = DmSans, fontSize = 12.sp),
-    labelLarge = TextStyle(fontFamily = DmSans, fontWeight = FontWeight.Medium, fontSize = 14.sp),
+    displaySmall = TextStyle(fontFamily = DmSans, fontWeight = FontWeight.SemiBold, fontSize = 36.sp, lineHeight = 42.sp),
+    headlineLarge = TextStyle(fontFamily = DmSans, fontWeight = FontWeight.SemiBold, fontSize = 30.sp, lineHeight = 36.sp),
+    headlineMedium = TextStyle(fontFamily = DmSans, fontWeight = FontWeight.SemiBold, fontSize = 26.sp, lineHeight = 32.sp),
+    headlineSmall = TextStyle(fontFamily = DmSans, fontWeight = FontWeight.SemiBold, fontSize = 22.sp, lineHeight = 28.sp),
+    titleLarge = TextStyle(fontFamily = DmSans, fontWeight = FontWeight.SemiBold, fontSize = 20.sp, lineHeight = 26.sp),
+    titleMedium = TextStyle(fontFamily = DmSans, fontWeight = FontWeight.Medium, fontSize = 16.sp, lineHeight = 22.sp),
+    titleSmall = TextStyle(fontFamily = DmSans, fontWeight = FontWeight.Medium, fontSize = 14.sp, lineHeight = 20.sp),
+    bodyLarge = TextStyle(fontFamily = DmSans, fontSize = 16.sp, lineHeight = 24.sp),
+    bodyMedium = TextStyle(fontFamily = DmSans, fontSize = 14.sp, lineHeight = 20.sp),
+    bodySmall = TextStyle(fontFamily = DmSans, fontSize = 12.sp, lineHeight = 16.sp),
+    labelLarge = TextStyle(fontFamily = DmSans, fontWeight = FontWeight.SemiBold, fontSize = 14.sp),
+    labelMedium = TextStyle(fontFamily = DmSans, fontWeight = FontWeight.Medium, fontSize = 12.sp),
 )
 
 @Composable
