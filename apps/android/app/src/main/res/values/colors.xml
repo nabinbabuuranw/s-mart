@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="smart_paper">#F6F4EE</color>
+    <!-- S Mart brand palette, from the official logo (@smart.inaruwa profile picture). Contrast values are in palettes_log.md. -->
+    <color name="smart_paper">#F6F7F4</color>
+    <color name="smart_surface">#FFFFFF</color>
     <color name="smart_ink">#15191E</color>
-    <color name="smart_marigold">#D98E04</color>
-    <color name="smart_icon_background">#1E2B3A</color>
+    <color name="smart_muted">#5B6470</color>
+    <color name="smart_green">#167D3F</color>
+    <color name="smart_green_logo">#1C9A4E</color>
+    <color name="smart_red">#C42E16</color>
+    <color name="smart_red_logo">#ED3D22</color>
+    <color name="smart_icon_background">#FFFFFF</color>
 </resources>
