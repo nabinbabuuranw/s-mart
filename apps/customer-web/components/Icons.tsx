@@ -19,14 +19,8 @@ export const IconPlus = (p: P) => <svg {...base(p.className)}><path d="M12 5v14M
 export const IconMinus = (p: P) => <svg {...base(p.className)}><path d="M5 12h14" /></svg>;
 export const IconTrash = (p: P) => <svg {...base(p.className)}><path d="M4 7h16M9 7V4h6v3M6.5 7l1 13h9l1-13" /></svg>;
 export const IconPin = (p: P) => <svg {...base(p.className)}><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11Z" /><circle cx="12" cy="10" r="2.3" /></svg>;
-export const IconLogout = (p: P) => <svg {...base(p.className)}><path d="M9 4H5v16h4M14 8l4 4-4 4M18 12H9" /></svg>;
-export const IconPencil = (p: P) => <svg {...base(p.className)}><path d="M4 20h4L19 9l-4-4L4 16v4Z" /></svg>;
-export const IconReceipt = (p: P) => <svg {...base(p.className)}><path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3Z" /><path d="M9 8h6M9 12h6" /></svg>;
-export const IconChat = (p: P) => <svg {...base(p.className)}><path d="M4 5h16v11H9l-5 4V5Z" /></svg>;
+/** The S Mart logo: the official mark (from the brand's profile picture), shown as an image, never redrawn. */
 export const IconLogo = ({ className }: P) => (
-  <svg className={className || 'h-8 w-8'} viewBox="0 0 40 40" aria-hidden="true">
-    <rect x="1" y="1" width="38" height="38" rx="10" fill="var(--primary)" />
-    <path d="M27 12.5h-9.2a4.3 4.3 0 0 0 0 8.6h5.4a4.3 4.3 0 0 1 0 8.6H13" fill="none" stroke="var(--accent)" strokeWidth="3.6" strokeLinecap="round" />
-    <path d="M9 14.5h2.5M28.5 25.5h2.5" stroke="var(--on-primary)" strokeWidth="0" />
-  </svg>
+  // eslint-disable-next-line @next/next/no-img-element
+  <img src="/brand/logo-mark.png" alt="" aria-hidden="true" className={className || 'h-8 w-auto'} />
 );
