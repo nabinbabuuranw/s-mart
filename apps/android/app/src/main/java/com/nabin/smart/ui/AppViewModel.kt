@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.nabin.smart.SMartApp
 import com.nabin.smart.data.AuthUser
+import com.nabin.smart.data.ProductQuery
 import com.nabin.smart.data.ShopRepository
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -61,6 +62,20 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
 
     fun setWishlist(ids: Set<String>) {
         _wishlistIds.value = ids
+    }
+
+    private var pendingShopQuery: ProductQuery? = null
+
+    /** A screen elsewhere (Home search, a category chip) asks Shop to open with this search or category. */
+    fun requestShop(query: ProductQuery) {
+        pendingShopQuery = query
+    }
+
+    /** Shop takes the request once when it opens; a later open starts clean. */
+    fun takePendingShopQuery(): ProductQuery? {
+        val q = pendingShopQuery
+        pendingShopQuery = null
+        return q
     }
 
     fun notice(text: String) {
