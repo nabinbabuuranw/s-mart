@@ -31,3 +31,8 @@ See BACKUP_RESTORE.md. Daily cron plus an off-box copy; run `scripts/restore-tes
 
 ## CI
 `.github/workflows/ci.yml` (written; it runs on GitHub once the repo is pushed, not yet executed): install, build shared, `prisma migrate deploy` against a Postgres service, API tests (the suite needs `TEST_DATABASE_URL` and resets that database), build the API and both web apps. It uses throwaway secrets generated in the run; no repository secrets.
+
+## NODE_ENV=production for deployment (2026-11-05)
+- The repo's `.env` (and `.env.example`) sets `NODE_ENV=development` for local work. On a server, set `NODE_ENV=production` in the environment that runs the API (`node apps/api/dist/main.js`): it turns off Swagger (`/api/docs` returns 404), enables secure cookies, and is what the API checks.
+- The two web apps' `build` scripts force `NODE_ENV=production` themselves (`scripts/next-build.mjs`), so `npm run build` works even when `.env` is sourced into the shell. Next.js fails to prerender `/404` under `NODE_ENV=development` (`<Html> should not be imported outside of pages/_document`), which is why the override exists. Starting a built web app (`next start`) should also run with `NODE_ENV=production`.
+- Check before going live: `curl -s -o /dev/null -w '%{http_code}' https://<api-host>/api/docs` returns 404, and both web builds run with the production `.env` you deploy with.
