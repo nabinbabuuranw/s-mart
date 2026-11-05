@@ -41,8 +41,9 @@ import com.nabin.smart.ui.components.*
 fun ShopScreen(nav: Nav, vm: AppViewModel) {
     val repo = vm.repo
     var categories by remember { mutableStateOf<List<Category>>(emptyList()) }
-    var typed by remember { mutableStateOf("") }
-    var query by remember { mutableStateOf(ProductQuery()) }
+    val initial = remember { vm.takePendingShopQuery() ?: ProductQuery() }
+    var typed by remember { mutableStateOf(initial.q) }
+    var query by remember { mutableStateOf(initial) }
     var items by remember { mutableStateOf<List<Product>>(emptyList()) }
     var total by remember { mutableStateOf(0) }
     var loading by remember { mutableStateOf(true) }
