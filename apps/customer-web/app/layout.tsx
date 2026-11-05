@@ -7,9 +7,10 @@ import { SiteChrome } from '@/components/SiteChrome';
 
 export const metadata: Metadata = {
   title: { default: 'S Mart', template: '%s · S Mart' },
+  icons: { icon: [{ url: '/brand/favicon-32.png', sizes: '32x32', type: 'image/png' }, { url: '/brand/icon-192.png', sizes: '192x192', type: 'image/png' }], apple: '/brand/apple-touch-icon.png' },
   description: 'S Mart: everyday stationery, kitchen and home goods. Cash on delivery.',
 };
-export const viewport: Viewport = { width: 'device-width', initialScale: 1, themeColor: [{ media: '(prefers-color-scheme: light)', color: '#F6F4EE' }, { media: '(prefers-color-scheme: dark)', color: '#101418' }] };
+export const viewport: Viewport = { width: 'device-width', initialScale: 1, themeColor: [{ media: '(prefers-color-scheme: light)', color: '#F6F7F4' }, { media: '(prefers-color-scheme: dark)', color: '#0F1411' }] };
 
 const themeScript = `(function(){try{var t=localStorage.getItem('smart-theme');var d=t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();`;
 
