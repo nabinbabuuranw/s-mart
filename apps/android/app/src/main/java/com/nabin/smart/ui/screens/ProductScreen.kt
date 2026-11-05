@@ -1,6 +1,13 @@
 package com.nabin.smart.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -100,7 +107,7 @@ fun ProductScreen(slug: String, nav: Nav, vm: AppViewModel) {
             Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            RemoteImage(p.firstImage, repo.imageOrigin, Modifier.fillMaxWidth().aspectRatio(1f))
+            ProductGallery(p.imageUrls, repo.imageOrigin, Modifier.fillMaxWidth())
             if (!p.brand.isNullOrBlank()) Text(p.brand!!, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Text(p.name, style = MaterialTheme.typography.headlineSmall)
             if (p.categoryName != null) Text(p.categoryName!!, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -159,6 +166,47 @@ fun ProductScreen(slug: String, nav: Nav, vm: AppViewModel) {
                 } else {
                     Text("This item is out of stock right now.", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
+            }
+        }
+    }
+}
+
+/**
+ * Product photos: one image shows alone; several swipe in a pager with dots. Only the product's own
+ * photos from the API are shown, and an empty list shows the placeholder frame.
+ */
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun ProductGallery(urls: List<String>, origin: String, modifier: Modifier = Modifier) {
+    if (urls.size <= 1) {
+        RemoteImage(urls.firstOrNull(), origin, modifier.aspectRatio(1f))
+        return
+    }
+    val pager = rememberPagerState(pageCount = { urls.size })
+    Column(modifier) {
+        HorizontalPager(
+            state = pager,
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(1f)
+                .semantics { contentDescription = "Photo ${pager.currentPage + 1} of ${urls.size}" },
+        ) { page ->
+            RemoteImage(urls[page], origin, Modifier.fillMaxSize())
+        }
+        Row(
+            Modifier.fillMaxWidth().padding(top = 8.dp),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            urls.indices.forEach { i ->
+                val active = i == pager.currentPage
+                Box(
+                    Modifier
+                        .padding(horizontal = 3.dp)
+                        .size(if (active) 8.dp else 6.dp)
+                        .clip(CircleShape)
+                        .background(if (active) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline),
+                )
             }
         }
     }
