@@ -19,7 +19,7 @@
     "dev:admin": "npm run dev -w @smart/admin-web",
     "dev:customer": "npm run dev -w @smart/customer-web",
     "test": "npm run test -w @smart/api",
-    "test:e2e": "playwright test -c e2e/playwright.config.ts",
+    "test:e2e": "playwright test -c e2e/admin-web/playwright.config.ts && playwright test -c e2e/customer-web/playwright.config.ts",
     "build": "npm run build:shared && npm run build -w @smart/api && npm run build -w @smart/admin-web && npm run build -w @smart/customer-web"
   },
   "devDependencies": {
