@@ -3,6 +3,7 @@
     <style name="Theme.SMart" parent="android:Theme.Material.Light.NoActionBar">
         <item name="android:windowBackground">@color/smart_paper</item>
         <item name="android:statusBarColor">@color/smart_paper</item>
-        <item name="android:navigationBarColor">@color/smart_paper</item>
+        <item name="android:navigationBarColor">@color/smart_surface</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 </resources>
