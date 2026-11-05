@@ -1,0 +1,9 @@
+'use client';
+import {useState} from 'react';
+import {api,dt,errText} from '@/lib/api';
+import {useAsync,Async,PageHeader,Table,Button,Badge,Empty,Guard,useToast} from '@/components/ui';
+export default function Backups(){const toast=useToast();const s=useAsync(()=>api('/admin/backups'),[]);const [busy,setBusy]=useState('');
+  const run=async(k:string,fn:()=>Promise<any>,ok:(r:any)=>string)=>{setBusy(k);try{const r=await fn();toast(ok(r));s.reload()}catch(e){toast(errText(e),'err')}finally{setBusy('')}};
+  return <Guard perm="backup.manage"><PageHeader title="Backups" sub="A backup only counts once a restore has been verified against a scratch database."><Button loading={busy==='run'} onClick={()=>run('run',()=>api('/admin/backups',{method:'POST'}),()=>'Backup created')}>Run backup now</Button></PageHeader>
+  <Async s={s}>{(d:any)=><>{d.lastVerification&&<div className="card mb-4 p-4 text-sm"><p className="font-medium">Last restore verification</p><pre className="mt-1 whitespace-pre-wrap text-xs text-muted">{typeof d.lastVerification==='string'?d.lastVerification:JSON.stringify(d.lastVerification,null,1)}</pre></div>}
+  {!(d.items||[]).length?<Empty title="No backups yet" hint="Run a backup, then verify its restore."/>:<Table rows={d.items} rowKey="name" cols={[{h:'Backup',r:(b:any)=><code className="text-xs">{b.name}</code>},{h:'Size',r:(b:any)=>b.size!=null?(b.size/1024).toFixed(0)+' KB':'—'},{h:'Created',r:(b:any)=><span className="text-xs text-muted">{dt(b.createdAt||b.modifiedAt||b.mtime)}</span>},{h:'Verified',r:(b:any)=>b.verified?<Badge tone="ok">Restore verified</Badge>:<Badge>Not verified</Badge>},{h:'',cls:'text-right',r:(b:any)=><Button size="sm" variant="ghost" loading={busy===b.name} onClick={()=>run(b.name,()=>api(`/admin/backups/${encodeURIComponent(b.name)}/verify`,{method:'POST'}),(r)=>r?.ok===false?'Verification failed':'Restore verification finished')}>Verify restore</Button>}]}/>}</>}</Async></Guard>}
