@@ -6,7 +6,7 @@ import { useAuth } from '@/lib/auth';
 import { useCart } from '@/lib/cart';
 import { api } from '@/lib/api';
 import { useRealtime } from '@/lib/realtime';
-import { IconBell, IconCart, IconClose, IconLogo, IconMenu, IconMoon, IconSearch, IconSun, IconUser } from './Icons';
+import { IconBell, IconCart, IconClose, IconMenu, IconMoon, IconSearch, IconSun, IconUser } from './Icons';
 
 export function SiteChrome({ children }: { children: ReactNode }) {
   return (
@@ -70,8 +70,7 @@ function Header() {
           {open ? <IconClose /> : <IconMenu />}
         </button>
         <Link href="/" className="flex items-center gap-2" aria-label="S Mart home">
-          <IconLogo className="h-8 w-8" />
-          <span className="font-display text-xl font-semibold">S Mart</span>
+          <img src="/brand/logo-mark.png" alt="S Mart" width={120} height={121} className="h-9 w-auto" />
         </Link>
         <nav aria-label="Main" className="hidden items-center gap-5 md:flex">
           {links.map((l) => (
@@ -132,7 +131,7 @@ function Footer() {
     <footer className="mt-20 border-t border-line bg-surface">
       <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 md:grid-cols-3 md:px-6">
         <div>
-          <div className="flex items-center gap-2"><IconLogo className="h-7 w-7" /><span className="font-display text-lg font-semibold">S Mart</span></div>
+          <img src="/brand/logo-mark.png" alt="S Mart" width={120} height={121} className="h-9 w-auto" />
           <p className="mt-3 max-w-xs text-sm text-muted">Everyday stationery, kitchen and home goods. Pay in cash when your order arrives.</p>
         </div>
         <nav aria-label="Footer" className="grid grid-cols-2 gap-2 text-sm">
