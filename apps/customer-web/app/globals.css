@@ -1,4 +1,3 @@
-@import '@fontsource-variable/fraunces/wght.css';
 @import '@fontsource/dm-sans/400.css';
 @import '@fontsource/dm-sans/500.css';
 @import '@fontsource/dm-sans/700.css';
@@ -7,22 +6,23 @@
 @tailwind utilities;
 
 :root {
-  --paper: #F6F4EE; --surface: #FFFFFF; --ink: #15191E; --muted: #566070; --line: #E2DED3; --soft: #E6EAEF;
-  --primary: #1E2B3A; --primary-hover: #14202C; --on-primary: #FFFFFF;
-  --accent: #D98E04; --accent-text: #8A5A00; --accent-soft: #FBEFD2;
-  --success: #1F7A4C; --danger: #B3261E; --info: #3E5C76;
+  /* S Mart brand, from the official logo: green #167D3F (text-safe; logo green #1C9A4E), red #C42E16 (logo red #ED3D22). Contrast in palettes_log.md. */
+  --paper: #F6F7F4; --surface: #FFFFFF; --ink: #15191E; --muted: #5B6470; --line: #E3E6E1; --soft: #EEF1EC;
+  --primary: #167D3F; --primary-hover: #0F5F30; --on-primary: #FFFFFF;
+  --accent: #C42E16; --accent-text: #C42E16; --accent-soft: #FDECE9;
+  --success: #167D3F; --danger: #B3261E; --info: #3E5C76;
   color-scheme: light;
 }
 .dark {
-  --paper: #101418; --surface: #182029; --ink: #E9EDF1; --muted: #9AA6B2; --line: #28323D; --soft: #1F2A35;
-  --primary: #A9BDD3; --primary-hover: #C3D3E3; --on-primary: #101418;
-  --accent: #F0B33C; --accent-text: #F0B33C; --accent-soft: #3A2E12;
-  --success: #5FBF8A; --danger: #F2847C; --info: #8FB0CC;
+  --paper: #0F1411; --surface: #161D18; --ink: #E9EFEA; --muted: #9AA79E; --line: #2A352E; --soft: #1E2822;
+  --primary: #4CC27C; --primary-hover: #6BD495; --on-primary: #0F1411;
+  --accent: #FF6B55; --accent-text: #FF6B55; --accent-soft: #3A1D17;
+  --success: #4CC27C; --danger: #F2847C; --info: #8FB0CC;
   color-scheme: dark;
 }
 html { background: var(--paper); color: var(--ink); }
 body { font-family: "DM Sans Variable", "DM Sans", ui-sans-serif, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
-h1, h2, h3 { font-family: "Fraunces Variable", Fraunces, Georgia, serif; font-variation-settings: "SOFT" 50; letter-spacing: -0.01em; }
+h1, h2, h3 { font-family: "DM Sans Variable", "DM Sans", ui-sans-serif, system-ui, sans-serif; font-weight: 600; letter-spacing: -0.01em; }
 :focus-visible { outline: 2px solid var(--accent-text); outline-offset: 2px; border-radius: 4px; }
 .skip-link { position: absolute; left: -9999px; top: 0; }
 .skip-link:focus { left: 12px; top: 12px; z-index: 100; background: var(--surface); color: var(--ink); padding: 8px 12px; border-radius: 8px; }
