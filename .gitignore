@@ -3,7 +3,11 @@ node_modules
 dist
 build
 uploads
-backups
+# Database backup output only (dumps hold data and are never committed).
+# A source folder named "backups" (for example the admin Backups page) is tracked.
+/backups/
+/apps/api/backups/
+smart-*.dump
 .env
 .env.*
 !.env.example
