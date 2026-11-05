@@ -11,7 +11,7 @@ module.exports = {
         'accent-soft': 'var(--accent-soft)', success: 'var(--success)', danger: 'var(--danger)', info: 'var(--info)',
       },
       fontFamily: {
-        display: ['"Fraunces Variable"', 'Fraunces', 'Georgia', 'serif'],
+        display: ['"DM Sans Variable"', '"DM Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
         sans: ['"DM Sans Variable"', '"DM Sans"', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
       },
     },
