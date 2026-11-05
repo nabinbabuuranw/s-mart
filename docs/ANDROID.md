@@ -1,6 +1,6 @@
 # S Mart Android app (M2): status and feature matrix
 
-Version 0.1.0-m2 (versionCode 2). Package `com.nabin.smart`, label "S Mart". Native Kotlin and Jetpack Compose, in `apps/android/`. It talks to the same REST API as the customer web app (`/api/v1`, bearer tokens).
+Version 0.2.0-m3 (versionCode 3; m2 was 0.1.0-m2). Package `com.nabin.smart`, label "S Mart". Native Kotlin and Jetpack Compose, in `apps/android/`. It talks to the same REST API as the customer web app (`/api/v1`, bearer tokens).
 
 Written 2026-11-05 from the code and from the runs listed below. Nothing here is a plan dressed up as a feature: **Implemented** means the screen calls the real API and the call was run; **Partial** means some of it works or is untested; **Planned** means not in the app.
 
@@ -25,13 +25,14 @@ The live tests ran these requests against the real API: register, log out, log i
 |---|---|---|
 | Splash | Implemented | Brand splash, then Home. Nothing loaded from the network. |
 | Home: featured and offers rows | Implemented | Lists come from `/catalog/products` (featured, onOffer). |
-| Home: category chips | Partial | Chips show the categories; tapping opens Shop without preselecting that category. |
+| Home: category chips | Implemented | Tapping a category opens Shop already filtered to that category. |
+| Home: search with suggestions | Implemented (m3) | Search field on Home. Suggestions come from the catalogue API (`q`, debounced 250 ms) and are ordered by name match first. Tapping one opens the product; Enter or "See all results" opens Shop with the search. Unit-tested ranking; no made-up popular searches. |
 | Home: hero banners | Planned | The API has banners; the app does not show them yet. |
 | Shop: search | Implemented | `q` on `/catalog/products`. |
 | Shop: category filter | Implemented | Category slug on `/catalog/products`. |
 | Shop: price bands | Implemented | Under Rs. 500, Rs. 500 to 2,000, over Rs. 2,000 (paisa bounds). Filter parameters unit-tested; the band call is in the live test. |
 | Shop: sort and load more | Implemented | Newest, price low/high, name; pages of 20. |
-| Product detail: photo | Partial | Shows the first photo only (no gallery). Real product photos were not checked against live data. |
+| Product detail: photo | Implemented (m3) | Swipeable gallery of the product's own photos with dots when there is more than one; a single photo shows alone. Pinch-zoom is not in this build. |
 | Product detail: variants, price, list price, offers | Implemented | Server prices; the struck list price shows only when it is higher. Out-of-stock variants are disabled. |
 | Product detail: save for later | Implemented | Wishlist add and remove (live test). Needs sign-in; a guest is sent to sign in. |
 | Cart: add, change, remove, totals | Implemented | Totals are the server's. Live test covers add, set, change. |
@@ -54,8 +55,9 @@ The live tests ran these requests against the real API: register, log out, log i
 | Notifications | Planned | The API has notifications; not in the app. |
 | Support tickets | Planned | The API has tickets; not in the app. |
 | Push notifications | Planned | Needs a Firebase project from Nabin (his Google account). Not created by Tab. |
-| Dark mode | Implemented (palette only) | Light and dark palettes from the web app. Not checked on a device. |
-| Typography | Implemented | Fraunces (headings) and DM Sans (text), bundled as static instances (SIL OFL 1.1). |
+| Dark mode | Implemented (palette only) | Light and dark S Mart palettes (from the logo; see palettes_log.md in the release). Not checked on a device. |
+| Typography | Implemented | DM Sans for headings and text (m3; the logo is a sans wordmark), bundled as static instances (SIL OFL 1.1). |
+| Launcher icon and splash | Implemented (m3) | The official logo as an adaptive icon (foreground, white background, monochrome layer) and on the splash. Not checked on a launcher. |
 | Offline use | Planned | The app needs the network for everything. |
 
 ## Build
